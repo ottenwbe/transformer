@@ -22,17 +22,32 @@
 
 package de.ottenwbe.transformer.controller;
 
+import de.ottenwbe.transformer.services.ConverterInterface;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/test")
-public class RootController {
+public class ConversionController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String getRoot() {
-        return "{test}";
+    ConverterInterface converter;
+
+    ConversionController(ConverterInterface converter) {
+        this.converter = converter;
+    }
+
+    @RequestMapping(path = "/to-yaml", method = RequestMethod.POST)
+    public String getYaml(@RequestBody String jsonString) {
+        return converter.toYaml(jsonString);
+    }
+
+    @RequestMapping(path = "/to-xml", method = RequestMethod.POST)
+    public String getXML(@RequestBody String jsonString) {
+        return converter.toXML(jsonString);
+    }
+
+    @RequestMapping(path = "/to-json", method = RequestMethod.POST)
+    public String getJson(@RequestBody String jsonString) {
+        return converter.toJson(jsonString);
     }
 
 }

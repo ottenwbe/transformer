@@ -22,39 +22,52 @@
 
 package de.ottenwbe.transformer.services;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import de.ottenwbe.transformer.controller.JsonController;
-import de.ottenwbe.transformer.data.XML;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.Yaml;
-
-import java.util.Map;
 
 @Service
-public class YamlConverter implements ConverterInterface {
+public class XMLConverter implements ConverterInterface {
 
     private static Log log = LogFactory.getLog(JsonController.class);
 
     @Override
-    public String toYaml(String yamlString) {
-        return yamlString;
+    public String toYaml(String xmlString) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode node = xmlMapper.readTree(xmlString);
+
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+            return yamlMapper.writeValueAsString(node);
+
+        } catch (Exception e) {
+            log.error("Cannot convert xml to yaml", e);
+        }
+        return "";
     }
 
     @Override
-    public String toJson(String yamlString) {
-        log.trace(String.format("Convert yaml to json: %s", yamlString));
-        Yaml yaml = new Yaml();
-        Map transformerMap = (Map) yaml.load(yamlString);
-        return new Gson().toJson(transformerMap);
+    public String toJson(String xmlString) {
+        try {
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode node = xmlMapper.readTree(xmlString);
+
+            ObjectMapper jsonMapper = new ObjectMapper();
+            return jsonMapper.writeValueAsString(node);
+
+        } catch (Exception e) {
+            log.error("Cannot convert xml to json", e);
+        }
+        return "";
     }
 
     @Override
-    public String toXML(String yamlString) {
-        log.trace(String.format("Convert yaml to xml: %s", yamlString));
-        Yaml yaml = new Yaml();
-        Map transformerMap = (Map) yaml.load(yamlString);
-        return XML.toString(transformerMap);
+    public String toXML(String xmlString) {
+        return xmlString;
     }
 }

@@ -23,18 +23,32 @@
 package de.ottenwbe.transformer.services;
 
 import com.google.gson.Gson;
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
 
 @Service
-public class JsonConverter {
+public class JsonConverter implements ConverterInterface {
 
+    @Override
     public String toYaml(String jsonString) {
         Gson json = new Gson();
         Map jsonObject = json.fromJson(jsonString, Map.class);
         return new Yaml().dumpAsMap(jsonObject);
+    }
+
+    @Override
+    public String toJson(String jsonString) {
+        return jsonString;
+    }
+
+    @Override
+    public String toXML(String jsonString) {
+        JSONObject jsonObject = new JSONObject(jsonString);
+        return XML.toString(jsonObject);
     }
 
 }

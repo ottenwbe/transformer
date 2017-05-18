@@ -24,21 +24,16 @@ package de.ottenwbe.transformer.controller;
 
 import de.ottenwbe.transformer.services.YamlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/yaml")
-public class YamlController {
+public class YamlController extends ConversionController {
 
     @Autowired
-    private YamlConverter yamlConverter;
-
-    @RequestMapping(path = "/to-json", method = RequestMethod.POST)
-    public String fromYaml(@RequestBody String yamlString) {
-        return yamlConverter.toJson(yamlString);
+    YamlController(YamlConverter yamlConverter) {
+        super(yamlConverter);
     }
 
 }

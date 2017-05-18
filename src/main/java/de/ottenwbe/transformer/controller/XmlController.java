@@ -22,17 +22,17 @@
 
 package de.ottenwbe.transformer.controller;
 
+import de.ottenwbe.transformer.services.XMLConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/test")
-public class RootController {
+@RequestMapping("/xml")
+public class XmlController extends ConversionController {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String getRoot() {
-        return "{test}";
+    @Autowired
+    XmlController(XMLConverter xmlConverter) {
+        super(xmlConverter);
     }
-
 }

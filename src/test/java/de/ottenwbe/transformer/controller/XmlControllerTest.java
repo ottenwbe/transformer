@@ -35,36 +35,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class YamlControllerTest {
+public class XmlControllerTest {
 
     @Autowired
-    public TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
 
     @Test
     public void testToJson() {
 
-        String expectedJson = "{\"a\":{\"b\":1}}";
-        String testYaml = "---\na: \n  b: 1";
+        String expectedJson = "{\"a\":{\"b\":\"1\"}}";
+        String testXml = "<root><a><b>1</b></a></root>";
 
-        HttpEntity<String> request = new HttpEntity<>(testYaml);
+        HttpEntity<String> request = new HttpEntity<>(testXml);
 
-        ResponseEntity<String> response = this.restTemplate.postForEntity("/yaml/to-json", request, String.class);
+        ResponseEntity<String> response = this.restTemplate.postForEntity("/xml/to-json", request, String.class);
 
         assertThat(response.getBody()).isEqualTo(expectedJson);
     }
 
-
     @Test
-    public void testToXML() {
+    public void testToYaml() {
 
-        String expectedXML = "<a><b>1</b></a>";
-        String testYaml = "---\na: \n  b: 1";
+        String expectedYaml = "---\na:\n  b: \"1\"\n";
+        String testXml = "<root><a><b>1</b></a></root>";
 
-        HttpEntity<String> request = new HttpEntity<>(testYaml);
+        HttpEntity<String> request = new HttpEntity<>(testXml);
 
-        ResponseEntity<String> response = this.restTemplate.postForEntity("/yaml/to-xml", request, String.class);
+        ResponseEntity<String> response = this.restTemplate.postForEntity("/xml/to-yaml", request, String.class);
 
-        assertThat(response.getBody()).isEqualTo(expectedXML);
+        assertThat(response.getBody()).isEqualTo(expectedYaml);
     }
 
 }

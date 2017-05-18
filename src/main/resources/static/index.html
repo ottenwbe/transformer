@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <title>Transformer UI</title>
+    <link href="css/angular-bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body ng-app="transformer">
+
+<div class="container">
+    <h1>Transformer</h1>
+    <div ng-controller="home" ng-cloak class="ng-cloak">
+        <p>
+            <textarea id="inputConversionText" ng-model="conversionText" class="textarea textarea--transparent"
+                      placeholder="Put your json/yaml/xml data here." style="width: 49%; height: 400px;">
+                {{content}}
+            </textarea>
+            <textarea id="outputConversionText" ng-model="convertedText" class="textarea textarea--transparent"
+                      placeholder="Here your converted data will appear." style="width: 49%; height: 400px;">
+                {{content}}
+            </textarea>
+        </p>
+        {{content}}
+        <button ng-click="convert()">Convert</button>
+    </div>
+</div>
+<script src="js/angular.min.js"></script>
+<script src="js/transformer.js"></script>
+</body>
+</html>

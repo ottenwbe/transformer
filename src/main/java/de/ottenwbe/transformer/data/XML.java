@@ -20,19 +20,44 @@
  * SOFTWARE.
  */
 
-package de.ottenwbe.transformer.controller;
+package de.ottenwbe.transformer.data;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
-@RestController
-@RequestMapping("/test")
-public class RootController {
+public class XML {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String getRoot() {
-        return "{test}";
+    static public String toString(Map map) {
+        StringBuilder sb = new StringBuilder();
+        if (map != null) {
+            map.forEach((key, value) -> {
+                openTag(sb, key);
+                addValue(sb, value);
+                closeTag(sb, key);
+            });
+        }
+        return sb.toString();
+    }
+
+    private static void addValue(StringBuilder sb, Object value) {
+        if (value instanceof Map) {
+            sb.append(toString((Map) value));
+        } else {
+            sb.append(value);
+        }
+    }
+
+    private static void closeTag(StringBuilder sb, Object key) {
+        tag(sb, key, "</");
+    }
+
+    private static void openTag(StringBuilder sb, Object key) {
+        tag(sb, key, "<");
+    }
+
+    private static void tag(StringBuilder sb, Object key, String str) {
+        sb.append(str);
+        sb.append(key);
+        sb.append(">");
     }
 
 }

@@ -20,19 +20,13 @@
  * SOFTWARE.
  */
 
-package de.ottenwbe.transformer.controller;
+package de.ottenwbe.transformer.services;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+public interface ConverterInterface {
+    String toYaml(String conversionString);
 
-@RestController
-@RequestMapping("/test")
-public class RootController {
+    String toJson(String conversionString);
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String getRoot() {
-        return "{test}";
-    }
-
+    String toXML(String conversionString);
 }
+

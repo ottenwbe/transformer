@@ -1,17 +1,45 @@
+/**
+ * Copyright (c) 2017 Beate Ottenwälder
+ * <p>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * <p>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 angular.module('transformer', [])
-    .controller('home', function ($scope) {
+    .controller('home', function ($scope, $http) {
 
-        $scope.convertedText = {content: 'convertedText'}
+        $scope.from='json'
+        $scope.to='to-yaml'
 
-        $scope.sendMessage = function(){
+        $scope.convert = function(){
             $http({
-                url: "....",
-                method: "POST",
-            }).success(function(data) {
-                $scope.convertedText = {content: 'convertedText'}
-            }).error(function(data) {
-                $scope.convertedText = {content: 'convertedText'}
+                url: 'http://localhost:8080/'.concat($scope.from).concat('/').concat($scope.to),
+                method: 'POST',
+                data: $scope.conversionText,
+                transformResponse: function (data) {
+                    return data.toString();
+                }
+            }).then(function(response) {
+                console.log(response);
+                $scope.convertedText = response.data;
+            }, function(response) {
+                $scope.convertedText = response.data;
             });
-        }
+        };
 
-    })
+    });

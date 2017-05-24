@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Transformer UI</title>
-    <link href="css/angular-bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         [ng\:cloak], [ng-cloak], .ng-cloak {
             display: none !important;
@@ -15,19 +15,57 @@
 <div class="container">
     <h1>Transformer</h1>
     <div ng-controller="home" ng-cloak class="ng-cloak">
-        <p>
-            <textarea id="inputConversionText" ng-model="conversionText" class="textarea textarea--transparent"
-                      placeholder="Put your json/yaml/xml data here." style="width: 49%; height: 400px;">
-                {{content}}
-            </textarea>
-            <textarea id="outputConversionText" ng-model="convertedText" class="textarea textarea--transparent"
-                      placeholder="Here your converted data will appear." style="width: 49%; height: 400px;">
-                {{content}}
-            </textarea>
-        </p>
-        {{content}}
-        <button ng-click="convert()">Convert</button>
+
+        <table width="100%;">
+            <tr>
+                <td>
+                    <div style="width: 98%; height: 450px;" >
+                        <p>
+                        <textarea ng-model="conversionText"
+                                  placeholder="Put the json/yaml/xml data you want to convert here." style="width: 98%; height: 400px;">
+                        </textarea>
+                        </p>
+                        <label>From:</label>
+                        <br>
+                        <label>Json:
+                            <input type="radio" ng-model="from" value="json">
+                        </label>
+                        <label>Yaml:
+                            <input type="radio" ng-model="from" value="yaml">
+                        </label>
+                        <label>XML:
+                            <input type="radio" ng-model="from" value="xml">
+                        </label>
+                        <br>
+                    </div>
+                    <br>
+                </td><td>
+                    <div style="width: 98%; height: 450px;">
+                        <p>
+                        <textarea ng-model="convertedText" ng-readonly=true ng-disabled=true
+                         placeholder="Here your converted data will appear." style="width: 98%; height: 400px;">
+                         </textarea>
+                        </p>
+                        <label>To:</label>
+                        <br>
+                        <label>Json:
+                            <input type="radio" ng-model="to" value="to-json">
+                        </label>
+                        <label>Yaml:
+                            <input type="radio" ng-model="to" value="to-yaml">
+                        </label>
+                        <label>XML:
+                            <input type="radio" ng-model="to" value="to-xml">
+                        </label>
+                        <br>
+                    </div>
+                    <br>
+                </td>
+            </tr>
+        </table>
+        <button ng-click="convert()" style="width: 100%;" class="btn btn-primary">Convert</button>
     </div>
+
 </div>
 <script src="js/angular.min.js"></script>
 <script src="js/transformer.js"></script>

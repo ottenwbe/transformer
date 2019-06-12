@@ -22,20 +22,14 @@
 * SOFTWARE.
 */
 
-package de.ottenwbe.transformer.controller;
+package de.ottenwbe.transformer.services;
 
-import de.ottenwbe.transformer.services.YamlConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import de.ottenwbe.transformer.data.ConversionException;
 
-@RestController
-@RequestMapping("/yaml")
-public class YamlController extends ConversionController {
+public interface Converter {
+    String toYaml(String conversionString) throws ConversionException;
 
-    @Autowired
-    YamlController(YamlConverter yamlConverter) {
-        super(yamlConverter);
-    }
+    String toJson(String conversionString) throws ConversionException;
 
+    String toXML(String conversionString) throws ConversionException;
 }

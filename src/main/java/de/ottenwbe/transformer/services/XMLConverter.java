@@ -1,73 +1,75 @@
-/**
- * Copyright (c) 2017 Beate Ottenwälder
- * <p>
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * <p>
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * <p>
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+/** 
+* MIT License
+* 
+* Copyright (c) 2017-2019 Beate Ottenwälder
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
 
 package de.ottenwbe.transformer.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import de.ottenwbe.transformer.controller.JsonController;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.springframework.stereotype.Service;
 
-@Service
-public class XMLConverter implements ConverterInterface {
+import de.ottenwbe.transformer.data.ConversionException;
+import lombok.extern.slf4j.Slf4j;
 
-    private static Log log = LogFactory.getLog(JsonController.class);
+@Slf4j
+@Service
+public class XMLConverter implements Converter {
 
     @Override
-    public String toYaml(String xmlString) {
+    public String toYaml(String xmlString) throws ConversionException {
+        log.trace("Convert xml to yaml: {}", xmlString);
         try {
-            XmlMapper xmlMapper = new XmlMapper();
-            JsonNode node = xmlMapper.readTree(xmlString);
+            final XmlMapper xmlMapper = new XmlMapper();
+            Map<?, ?> transformerMap = xmlMapper.readValue(xmlString, Map.class);
 
-            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-            return yamlMapper.writeValueAsString(node);
-
+            final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+            return yamlMapper.writeValueAsString(transformerMap);
         } catch (Exception e) {
-            log.error("Cannot convert xml to yaml", e);
+            throw new ConversionException("Cannot convert xml to yaml", e);
         }
-        return "";
     }
 
     @Override
-    public String toJson(String xmlString) {
+    public String toJson(String xmlString) throws ConversionException {
+        log.trace("Convert xml to json: {}", xmlString);
         try {
-            XmlMapper xmlMapper = new XmlMapper();
-            JsonNode node = xmlMapper.readTree(xmlString);
+            final XmlMapper xmlMapper = new XmlMapper();
+            Map<?, ?> transformerMap = xmlMapper.readValue(xmlString, Map.class);
 
-            ObjectMapper jsonMapper = new ObjectMapper();
-            return jsonMapper.writeValueAsString(node);
-
+            final ObjectMapper jsonMapper = new ObjectMapper();
+            return jsonMapper.writeValueAsString(transformerMap);
         } catch (Exception e) {
-            log.error("Cannot convert xml to json", e);
+            throw new ConversionException("Cannot convert xml to json", e);
         }
-        return "";
     }
 
     @Override
     public String toXML(String xmlString) {
+        log.trace("Convert xml to xml: {}", xmlString);
         return xmlString;
     }
 }

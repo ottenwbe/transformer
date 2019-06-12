@@ -22,20 +22,36 @@
 * SOFTWARE.
 */
 
-package de.ottenwbe.transformer.controller;
+package de.ottenwbe.transformer.data;
 
-import de.ottenwbe.transformer.services.YamlConverter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RestController
-@RequestMapping("/yaml")
-public class YamlController extends ConversionController {
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class XMLTest {
 
     @Autowired
-    YamlController(YamlConverter yamlConverter) {
-        super(yamlConverter);
-    }
+    XML xml;
 
+    @Test
+    public void mapToXMLStringTest() {
+        final String expectedXML = "<root><e><a>b</a><c>d</c></e></root>";
+        Map<String, Object> testMap = new HashMap<>();
+        testMap.put("e", Stream.of(new String[][] { { "a", "b" }, { "c", "d" } })
+                .collect(Collectors.toMap(data -> data[0], data -> data[1])));
+        String actualXML = xml.toString(testMap);
+        assertThat(actualXML).isEqualTo(expectedXML);
+    }
 }

@@ -22,20 +22,21 @@
 * SOFTWARE.
 */
 
-package de.ottenwbe.transformer.controller;
+package de.ottenwbe.transformer.data;
 
-import de.ottenwbe.transformer.services.YamlConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-@RestController
-@RequestMapping("/yaml")
-public class YamlController extends ConversionController {
+import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.extern.slf4j.Slf4j;
 
-    @Autowired
-    YamlController(YamlConverter yamlConverter) {
-        super(yamlConverter);
+@Slf4j
+@ResponseStatus(BAD_REQUEST)
+public class ConversionException extends Exception {
+
+    private static final long serialVersionUID = -3112798521621868292L;
+
+    public ConversionException(String errorMessage, Throwable e) {
+        super(errorMessage);
+        log.error(errorMessage, e);
     }
-
 }

@@ -1,7 +1,16 @@
 language: java
 dist: trusty
+
+services:
+  - docker
+
 jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew check
+  - ./gradlew build
+  - export TRANSFORMER_VERSION=$(./gradlew -q printVersion)
+  - docker build --build-arg JAR_FILE=transformer-${TRANSFORMER_VERSION}.jar -f packaging/container/Dockerfile -t ottenwbe/transformer:${TRANSFORMER_VERSION} .
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

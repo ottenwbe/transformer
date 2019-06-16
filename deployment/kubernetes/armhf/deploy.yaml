@@ -23,10 +23,10 @@ spec:
     spec:
       containers:
         - name: transformer
-          image: ottenwbe/transformer:latest
+          image: ottenwbe/transformer:armhf-snapshot
           ports:
-          - containerPort: 8080
-            protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
           imagePullPolicy: Always
 ---
 apiVersion: v1

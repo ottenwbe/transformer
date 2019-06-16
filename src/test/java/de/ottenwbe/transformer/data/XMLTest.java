@@ -54,4 +54,11 @@ public class XMLTest {
         String actualXML = xml.toString(testMap);
         assertThat(actualXML).isEqualTo(expectedXML);
     }
+
+    @Test
+    public void emptyMapToXMLStringTest() {
+        final String expectedXML = "<root></root>";
+        String actualXML = xml.toString(null);
+        assertThat(actualXML).isEqualTo(expectedXML);
+    }
 }

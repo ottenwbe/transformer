@@ -7,60 +7,33 @@
 Transformer is a simple web service to convert data from one format to another.
 For instance, you can convert a json document to yaml.
 
-Transformer offers an UI and a REST API for all supported conversions. 
+Transformer offers an UI and a REST API for all conversions from and to Json, Yaml, and XML. 
 
 ## Use-Case
 
-Transformer is an example for a stateless web service written in Java with Spring Boot. 
-It was initially implemented to experiment with data serialization libraries. 
-However, it then evolved to a test application for cloud-ish deployments.
+Transformer is an example of a stateless web service written in Java with Spring Boot. 
+It was initially developed to experiment with data serialization libraries. 
+However, it then evolved to a test application for cloud~ish deployments.
 
 ## Usage
 
-Either run transformer with Gradle, or build the web service and then run it.
+Transformer is available as docker image.
 
-### Quick Start
+    docker pull ottenwbe/transformer:latest
 
-You can simply run the web service by starting it with [Gradle](https://gradle.org/). 
- 
-    ./gradlew bootRun                        
- 
-
-### Building an Executable Jar 
-
-Gradle is used to build transformer.  
- 
-    ./gradlew build
-    
-You can now run the application:
-   
-    java -jar build/libs/transformer-<current version>.jar 
-
-### Building Containers
-
-x86:
-
-    docker build --build-arg JAR_FILE=transformer-$(./gradlew -q printVersion).jar -f packaging/container/Dockerfile -t ottenwbe/transformer:latest .
-    
-armhf:
-    
-    docker build --build-arg JAR_FILE=transformer-$(./gradlew -q printVersion).jar -f packaging/container/Dockerfile.armhf -t ottenwbe/armhf-transformer:latest .
-
-To start the container execute the following:
+To start transformer execute:
  
     docker run -d -p 8080:8080 ottenwbe/transformer:latest
 
- 
-## UI
+### Using the UI
 
-You can then access the UI by navigating to the following URL in your web browser once the web service is started.
- 
+You can access the UI by navigating to the following URL in your web browser.
+
     http://localhost:8080/
- 
- 
-## REST: Supported Conversions 
 
-The conversions can also be triggered by calling the web service via REST:
+### Using REST
+
+The conversions can be triggered by calling the web service via REST:
 
 |  From\To          | Json          | Yaml           | XML  |
 | :-------------:   | :-------------: |:-------------:| :-----:|
@@ -72,7 +45,59 @@ Example:
 
     curl localhost:8080/json/to-yaml -X POST -d '{"a":"b"}' -H "Content-Type: application/json"
     
-    
-## Kubernetes Deployment
+## Development
 
-    k3s kubectl apply -f deployment/k3s/x86/deploy.yaml 
+### Get Started  
+
+1. Clone the git repo
+
+    ```
+    git clone https://github.com/ottenwbe/transformer.git
+    ```
+
+1. You can then simply run the web service to see if everything is in order.
+    ``` 
+    ./gradlew bootRun
+    ```      
+
+### Build an Executable Jar 
+
+ [Gradle](https://gradle.org/) is used to build transformer.  
+ 
+    ./gradlew build
+    
+You can now run the application:
+       
+    java -jar build/libs/transformer-$(./gradlew -q printVersion).jar 
+
+### Tests
+
+    ./gradlew test
+
+### Build Docker Images
+
+All Dockerfiles can be found under ``packaging/container/``.
+
+x86_64:
+
+    docker build --build-arg JAR_FILE=transformer-$(./gradlew -q printVersion).jar -f packaging/container/x86_64/Dockerfile -t ottenwbe/transformer:latest .
+    
+armhf:
+    
+    docker build --build-arg JAR_FILE=transformer-$(./gradlew -q printVersion).jar -f packaging/container/armhf/Dockerfile -t ottenwbe/transformer:latest .
+
+To start the container execute:
+ 
+    docker run -d -p 8080:8080 ottenwbe/transformer:latest
+    
+## Deployments
+
+### Kubernetes
+
+All files needed to deploy the app on kubernetes can be found in the ``deployment/kubernetes`` folder.
+
+    kubectl apply -f deployment/kubernetes/x86_64/deploy.yaml 
+
+## Planned Additions
+* HELM Chart
+* CF Manifest

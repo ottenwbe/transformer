@@ -5,26 +5,32 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-version = '0.1.0-SNAPSHOT'
 sourceCompatibility = 1.8
-
-task printVersion {
-	doLast {
-		println version
-	}
-}
 
 buildscript {
 	ext {
 		springBootVersion = '2.1.5.RELEASE'
+		nebulaVersion = '6.3.5'
 	}
 	repositories {
 		mavenLocal()
 		mavenCentral()
+		jcenter() 
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("com.netflix.nebula:nebula-release-plugin:${nebulaVersion}")
 	}
+}
+
+apply plugin: 'nebula.release'
+
+nebulaRelease {
+  releaseBranchPatterns = [/release/]
+}
+
+task printVersion {	
+	println project.version	
 }
 
 repositories {
@@ -50,3 +56,5 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+
+

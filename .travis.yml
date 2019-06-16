@@ -7,10 +7,23 @@ services:
 jdk:
   - oraclejdk8
 
-script:
-  - ./gradlew build
-  - export TRANSFORMER_VERSION=$(./gradlew -q printVersion)
-  - docker build --build-arg JAR_FILE=transformer-${TRANSFORMER_VERSION}.jar -f packaging/container/Dockerfile -t ottenwbe/transformer:${TRANSFORMER_VERSION} .
+install: true
 
+jobs:
+  include:
+    - stage: Build SNAPSHOT
+      script:
+      - export TRANSFORMER_VERSION=$(./gradlew -q printVersion -Prelease.stage=SNAPSHOT)      
+      - ./gradlew snapshot      
+      - ./packaging/container/docker_build.sh
+
+deploy:
+  skip_cleanup: true  
+  provider: script
+  script: bash packaging/container/docker_push.sh
+  on:
+    all_branches: true
+    
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
